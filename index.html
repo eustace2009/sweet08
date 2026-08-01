@@ -35,12 +35,26 @@
 
 <!-- ============================================================
      設定區 — 要換金鑰只改這裡，其他檔案都不用動
+
+     URL 與金鑰用 Base64 編碼，避免在原始碼裡直接看到明文。
+     這只是簡單混淆、不是加密：任何人仍可用 atob() 解回，
+     實際的存取保護請靠資料表的 RLS policy。
+
+     要換值：到 https://www.base64encode.org 把新的網址／金鑰編碼後貼進來，
+     或在瀏覽器 Console 執行  btoa('你的值')  取得編碼字串。
      ============================================================ -->
 <script>
+  // GA4 追蹤 ID（本來就會公開，不編碼）
   const GA4_ID       = 'G-71KZYJDZ6P';
-  const SUPABASE_URL = 'https://oaeuwkkqjowsuhcojvxv.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_Gro08QK-PJ2f1KQyElGBsg_Ny73TiCd';
   const ORDERS_TABLE = 'orders';
+
+  // Base64 編碼後的 Supabase 設定；SUPABASE_URL / SUPABASE_KEY 於下方解碼還原
+  const SUPABASE_URL_B64 = 'aHR0cHM6Ly9vYWV1d2trcWpvd3N1aGNvanZ4di5zdXBhYmFzZS5jbw==';
+  const SUPABASE_KEY_B64 = 'c2JfcHVibGlzaGFibGVfR3JvMDhRSy1QSjJmMUtReUVsR0JzZ19OeTczVGlDZA==';
+
+  // 解碼還原成明文供程式使用
+  const SUPABASE_URL = atob(SUPABASE_URL_B64);
+  const SUPABASE_KEY = atob(SUPABASE_KEY_B64);
 </script>
 
 <!-- ============ GA4 ============ -->
@@ -177,7 +191,7 @@
     </div>
     <p class="site-footer__legal">
       &copy; 2026 甜蜜時光．本站為展示用途，付款流程為模擬，不會產生實際交易。
-      已整合 GA4 電子商務事件追蹤（G-JQEE2PLNR8）。
+      已整合 GA4 電子商務事件追蹤（G-71KZYJDZ6P）。
     </p>
   </div>
 </footer>
