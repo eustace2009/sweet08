@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-label="手工糖果插圖">
+  <defs>
+    <linearGradient id="bg4" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#bdf0e0"/>
+      <stop offset="1" stop-color="#3aa88c"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bg4)"/>
+  <g opacity=".35" fill="#ffffff">
+    <circle cx="52" cy="46" r="3"/><circle cx="330" cy="38" r="2.4"/>
+    <circle cx="366" cy="228" r="3.2"/><circle cx="44" cy="250" r="2.2"/>
+    <circle cx="200" cy="26" r="2"/>
+  </g>
+  <path d="M98 134 l22 16 -22 16 z" fill="#2f9d82"/>
+  <path d="M302 134 l-22 16 22 16 z" fill="#2f9d82"/>
+  <ellipse cx="200" cy="150" rx="76" ry="50" fill="#e9fff8"/>
+  <ellipse cx="177" cy="132" rx="18" ry="10" fill="#ffffff" opacity=".5"/>
+  <g stroke="#2f9d82" stroke-width="9" stroke-linecap="round" opacity=".9">
+    <path d="M158 118 q42 32 0 64"/>
+    <path d="M200 112 q42 38 0 76"/>
+    <path d="M242 118 q42 32 0 64"/>
+  </g>
+</svg>

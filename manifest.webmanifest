@@ -1,0 +1,56 @@
+{
+  "name": "甜蜜時光 — 手工糖果採購網",
+  "short_name": "甜蜜時光",
+  "description": "小批次手工熬煮的糖果：棒棒糖、軟糖、硬糖與黑糖塊。線上選購，離線也能瀏覽。",
+  "lang": "zh-Hant-TW",
+  "dir": "ltr",
+  "start_url": "./?source=pwa",
+  "scope": "./",
+  "id": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
+  "orientation": "any",
+  "background_color": "#fff1f5",
+  "theme_color": "#fff1f5",
+  "categories": ["shopping", "food"],
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./icons/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "看糖果櫃",
+      "short_name": "糖果櫃",
+      "url": "./?source=pwa#shelf",
+      "icons": [{ "src": "./icons/shortcut-shelf-96.png", "sizes": "96x96", "type": "image/png" }]
+    }
+  ]
+}

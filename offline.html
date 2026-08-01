@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>目前離線 — 甜蜜時光</title>
+<meta name="theme-color" content="#fff1f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a0b12" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  .offline-wrap {
+    min-height: 100svh;
+    display: grid;
+    place-items: center;
+    padding: var(--gutter);
+    text-align: center;
+  }
+  .offline-card {
+    max-width: 26rem;
+    display: grid;
+    gap: 1rem;
+    justify-items: center;
+  }
+  .offline-card h1 { font-size: var(--step-2); }
+  .offline-card p { color: var(--plum-soft); }
+</style>
+</head>
+<body>
+<div class="offline-wrap">
+  <div class="offline-card">
+    <img src="./img/candy-01.svg" alt="" width="140" height="105" style="border-radius:var(--radius)">
+    <p class="eyebrow">目前離線</p>
+    <h1>這一頁還沒被存下來</h1>
+    <p>你造訪過的頁面仍然可以開啟，購物車也保留在這台裝置上。等網路回來，重新整理就會恢復。</p>
+    <button type="button" class="btn btn--primary" onclick="location.reload()">重新載入</button>
+    <a class="btn btn--ghost" href="./">回到首頁</a>
+  </div>
+</div>
+<script>
+  addEventListener('online', function () { location.replace('./'); });
+</script>
+</body>
+</html>

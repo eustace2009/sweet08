@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>甜蜜時光 — 手工糖果採購網</title>
+<meta name="description" content="小批次手工熬煮的糖果：棒棒糖、軟糖、硬糖與黑糖塊。線上選購，離線也能瀏覽。">
+
+<!-- ============ PWA ============ -->
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#fff1f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a0b12" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<meta name="application-name" content="甜蜜時光">
+<!-- iOS 需要另一組標籤才能全螢幕啟動 -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="甜蜜時光">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<link rel="icon" href="./icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="./icons/icon-192.png" sizes="192x192">
+
+<!-- ============ 社群分享 ============ -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="甜蜜時光 — 手工糖果採購網">
+<meta property="og:description" content="小批次手工熬煮的糖果，線上選購。">
+<meta property="og:locale" content="zh_TW">
+
+<!-- ============ 樣式 ============ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Serif+TC:wght@700;900&display=swap">
+<link rel="stylesheet" href="./css/styles.css">
+
+<!-- ============================================================
+     設定區 — 要換金鑰只改這裡，其他檔案都不用動
+     ============================================================ -->
+<script>
+  const GA4_ID       = 'G-JQEE2PLNR8';
+  const SUPABASE_URL = 'https://fywjqwvxbuobkmwrofvu.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_OobRxK7fL8QkGfry08MwEQ_ZxzNekVu';
+  const ORDERS_TABLE = 'orders';
+</script>
+
+<!-- ============ GA4 ============ -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', GA4_ID);
+
+  // 用上面的 GA4_ID 載入 gtag.js，換 ID 不必動這段
+  (function () {
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA4_ID;
+    document.head.appendChild(s);
+  })();
+</script>
+</head>
+
+<body>
+<a class="skip-link" href="#main">跳到主要內容</a>
+
+<!-- 圖示集：取代 Font Awesome CDN，離線可用 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-candy" viewBox="0 0 24 24"><path d="M15.5 8.5a5 5 0 1 0-7 7 5 5 0 0 0 7-7Zm2.2-1.4 3.6-3.6a1 1 0 0 1 1.7.9l-.7 3.2 3.2-.7-.2 1.5-4.3.9a1 1 0 0 1-1.2-1.2l.6-2.7-2.7 2.7ZM6.3 16.9l-3.6 3.6a1 1 0 0 1-1.7-.9l.7-3.2-3.2.7.2-1.5 4.3-.9a1 1 0 0 1 1.2 1.2l-.6 2.7 2.7-2.7Z"/></symbol>
+  <symbol id="i-cart" viewBox="0 0 24 24"><path d="M2 3h2.2a1 1 0 0 1 1 .8L5.6 6H21a1 1 0 0 1 1 1.2l-1.4 6.4a2.5 2.5 0 0 1-2.4 2H8.5a2.5 2.5 0 0 1-2.5-2L4.3 5H2V3Zm4 15.5a1.8 1.8 0 1 1 3.6 0 1.8 1.8 0 0 1-3.6 0Zm10 0a1.8 1.8 0 1 1 3.6 0 1.8 1.8 0 0 1-3.6 0Z"/></symbol>
+  <symbol id="i-cart-plus" viewBox="0 0 24 24"><path d="M2 3h2.2a1 1 0 0 1 1 .8L5.6 6H21a1 1 0 0 1 1 1.2l-1.4 6.4a2.5 2.5 0 0 1-2.4 2H8.5a2.5 2.5 0 0 1-2.5-2L4.3 5H2V3Zm4 15.5a1.8 1.8 0 1 1 3.6 0 1.8 1.8 0 0 1-3.6 0Zm10 0a1.8 1.8 0 1 1 3.6 0 1.8 1.8 0 0 1-3.6 0ZM12.9 7.6v2h-2v1.6h2v2h1.6v-2h2V9.6h-2v-2h-1.6Z"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 6.3 17.7 4.9 16.3 9.2 12 4.9 7.7l1.4-1.4 4.3 4.3 4.3-4.3 1.4 1.4Z" transform="translate(1.3)"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M9.6 16.2 5.4 12l-1.4 1.4 5.6 5.6L20.4 8.2 19 6.8 9.6 16.2Z"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M9 3h6l1 1h4v2H4V4h4l1-1Zm-3 5h12l-.9 12.1A2 2 0 0 1 15.1 22H8.9a2 2 0 0 1-2-1.9L6 8Z"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 11h14v2H5z"/></symbol>
+  <symbol id="i-install" viewBox="0 0 24 24"><path d="M11 3h2v9.2l3.1-3.1 1.4 1.4-5.5 5.5-5.5-5.5 1.4-1.4L11 12.2V3ZM4 18h16v3H4z"/></symbol>
+  <symbol id="i-offline" viewBox="0 0 24 24"><path d="M2.1 3.5 3.5 2.1l18.4 18.4-1.4 1.4-3.3-3.3-5.2 4.3-10-11.6a15.6 15.6 0 0 1 5.3-3.3L2.1 3.5Zm7.8 3.9L7.6 5.1A15.7 15.7 0 0 1 22 8.9l-3 3.5a11.4 11.4 0 0 0-9.1-5Z"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24"><path d="M12 2 3 6v12l9 4 9-4V6l-9-4Zm0 2.2 6.3 2.8L12 9.8 5.7 7 12 4.2ZM5 8.6l6 2.7v8.3l-6-2.7V8.6Zm8 11v-8.3l6-2.7v8.3l-6 2.7Z"/></symbol>
+  <symbol id="i-spinner" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 1 10 10h-2.5A7.5 7.5 0 0 0 12 4.5V2Z"/></symbol>
+</svg>
+
+<!-- ==================== HEADER ==================== -->
+<header class="site-header">
+  <p class="net-banner" id="net-banner" hidden>
+    <svg class="icon" aria-hidden="true" style="vertical-align:-.2em"><use href="#i-offline"></use></svg>
+    目前離線，你仍可瀏覽看過的商品並整理購物車，恢復連線後再送出訂單。
+  </p>
+  <div class="container site-header__bar">
+    <div class="header-actions">
+      <a class="brand" href="./">
+        <svg aria-hidden="true"><use href="#i-candy"></use></svg>
+        甜蜜時光
+      </a>
+    </div>
+    <div class="header-actions">
+      <button type="button" class="btn btn--ghost install-btn" id="install-btn">
+        <svg class="icon" aria-hidden="true"><use href="#i-install"></use></svg>
+        <span class="install-btn__label">安裝 App</span>
+        <span class="visually-hidden">把甜蜜時光安裝到主畫面</span>
+      </button>
+      <button type="button" class="btn btn--icon cart-btn" id="cart-btn" aria-label="開啟購物車">
+        <svg class="icon" aria-hidden="true"><use href="#i-cart"></use></svg>
+        <span class="cart-btn__count" id="cart-count" hidden>0</span>
+      </button>
+    </div>
+  </div>
+
+</header>
+
+<main id="main">
+
+  <!-- ==================== HERO ==================== -->
+  <section class="hero container">
+    <div class="hero__grid">
+      <div>
+        <p class="eyebrow">小批次 · 銅鍋熬煮 · 台南出貨</p>
+        <h1 class="hero__title">今天熬的糖，<em>還是溫的</em>。</h1>
+        <p class="hero__lead">
+          六款糖果，每一鍋都是當天現熬、當天包裝。挑一份帶走，或替想念的人寄一盒。
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="#shelf">
+            <svg class="icon" aria-hidden="true"><use href="#i-candy"></use></svg>
+            看今天的糖
+          </a>
+          <button type="button" class="btn btn--ghost" id="hero-cart-btn">看看購物車</button>
+        </div>
+        <ul class="hero__facts">
+          <li><strong>6</strong><span>款當日品項</span></li>
+          <li><strong>48hr</strong><span>下單後出貨</span></li>
+          <li><strong>0</strong><span>人工色素</span></li>
+        </ul>
+      </div>
+      <div class="hero__stack" id="hero-stack" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- ==================== 商品 ==================== -->
+  <section class="shelf container" id="shelf">
+    <div class="shelf__head">
+      <div>
+        <p class="eyebrow">糖果櫃</p>
+        <h2>今天架上有這些</h2>
+      </div>
+      <p class="detail__meta" id="result-count" role="status" aria-live="polite"></p>
+    </div>
+
+    <div class="filters" id="filters" role="group" aria-label="依分類篩選商品"></div>
+
+    <div class="grid" id="product-grid"></div>
+  </section>
+</main>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__grid">
+      <div>
+        <h3>甜蜜時光</h3>
+        <p>手工糖果採購網。所有糖果皆為小批次製作，售完就等下一鍋。</p>
+      </div>
+      <div>
+        <h3>訂購</h3>
+        <ul>
+          <li>週一至週五 10:00–18:00 出貨</li>
+          <li>滿 NT$ 1,000 免運</li>
+          <li>常溫配送，請避免高溫存放</li>
+        </ul>
+      </div>
+      <div>
+        <h3>聯絡</h3>
+        <ul>
+          <li>hello@sweet-time.example</li>
+          <li>台南市中西區</li>
+        </ul>
+      </div>
+    </div>
+    <p class="site-footer__legal">
+      &copy; 2026 甜蜜時光．本站為展示用途，付款流程為模擬，不會產生實際交易。
+      已整合 GA4 電子商務事件追蹤（G-JQEE2PLNR8）。
+    </p>
+  </div>
+</footer>
+
+<!-- ==================== 手機底部購物列 ==================== -->
+<div class="dock" id="dock">
+  <div class="dock__inner">
+    <div>
+      <div class="dock__meta" id="dock-meta">購物車 0 件</div>
+      <div class="dock__total" id="dock-total">NT$ 0</div>
+    </div>
+    <button type="button" class="btn btn--primary" id="dock-btn">查看購物車</button>
+  </div>
+</div>
+
+<!-- ==================== 商品詳情 ==================== -->
+<dialog class="sheet" id="detail-dialog" aria-labelledby="detail-title">
+  <div class="sheet__positioner">
+    <div class="sheet__panel" style="position:relative">
+      <div class="sheet__grip"></div>
+      <button type="button" class="btn btn--icon detail__close" data-close aria-label="關閉商品資訊">
+        <svg class="icon" aria-hidden="true"><use href="#i-close"></use></svg>
+      </button>
+      <div class="sheet__body" id="detail-body"></div>
+    </div>
+  </div>
+</dialog>
+
+<!-- ==================== 購物車 ==================== -->
+<dialog class="sheet" id="cart-dialog" aria-labelledby="cart-title">
+  <div class="sheet__positioner">
+    <div class="sheet__panel">
+      <div class="sheet__grip"></div>
+      <div class="sheet__head">
+        <h2 id="cart-title">購物車</h2>
+        <button type="button" class="btn btn--icon btn--ghost" data-close aria-label="關閉購物車">
+          <svg class="icon" aria-hidden="true"><use href="#i-close"></use></svg>
+        </button>
+      </div>
+      <div class="sheet__body" id="cart-body"></div>
+      <div class="sheet__foot">
+        <div class="summary">
+          <span class="summary__label">總計</span>
+          <span class="tag tag--lg tag--accent" id="cart-total">NT$ 0</span>
+        </div>
+        <button type="button" class="btn btn--primary btn--block" id="checkout-btn" disabled>前往結帳</button>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<!-- ==================== 結帳 ==================== -->
+<dialog class="sheet" id="checkout-dialog" aria-labelledby="checkout-title">
+  <div class="sheet__positioner">
+    <div class="sheet__panel">
+      <div class="sheet__grip"></div>
+
+      <div id="checkout-step-form">
+        <div class="sheet__head">
+          <h2 id="checkout-title">填寫付款資訊</h2>
+          <button type="button" class="btn btn--icon btn--ghost" data-close aria-label="關閉結帳">
+            <svg class="icon" aria-hidden="true"><use href="#i-close"></use></svg>
+          </button>
+        </div>
+        <div class="sheet__body">
+          <form class="form" id="payment-form" novalidate>
+            <div class="field">
+              <label for="card-number">信用卡號</label>
+              <input id="card-number" name="cardNumber" type="text" inputmode="numeric"
+                     autocomplete="cc-number" placeholder="1234 5678 9876 5432" maxlength="19" required>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="card-exp">有效期限</label>
+                <input id="card-exp" name="cardExp" type="text" inputmode="numeric"
+                       autocomplete="cc-exp" placeholder="MM/YY" maxlength="5" required>
+              </div>
+              <div class="field">
+                <label for="card-cvc">安全碼</label>
+                <input id="card-cvc" name="cardCvc" type="text" inputmode="numeric"
+                       autocomplete="cc-csc" placeholder="123" maxlength="4" required>
+              </div>
+            </div>
+            <p class="detail__meta" id="pay-error" role="alert"></p>
+            <button type="submit" class="btn btn--primary btn--block" id="pay-btn">確認付款</button>
+            <p class="detail__meta">這是展示用流程，不會向任何卡片請款。</p>
+          </form>
+        </div>
+      </div>
+
+      <div id="checkout-step-done" hidden>
+        <div class="done">
+          <div class="done__mark">
+            <svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>
+          </div>
+          <h2>訂單成立</h2>
+          <p class="detail__meta">糖果正在打包，出貨後會寄送通知信給你。</p>
+          <p class="tag" id="order-id"></p>
+          <button type="button" class="btn btn--primary" id="continue-btn">繼續選購</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</dialog>
+
+<!-- ==================== 提示 ==================== -->
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <svg class="icon" aria-hidden="true" id="toast-icon"><use href="#i-check"></use></svg>
+  <span id="toast-msg"></span>
+</div>
+
+<div class="update-bar" id="update-bar" hidden role="status">
+  <span>有新版本可用</span>
+  <button type="button" class="btn btn--primary" id="update-btn">立即更新</button>
+</div>
+
+<script src="./js/data.js"></script>
+<script src="./js/analytics.js"></script>
+<script src="./js/app.js"></script>
+<script src="./js/pwa.js"></script>
+<!-- Supabase 用 ESM 動態載入，放最後且不阻塞其他功能 -->
+<script type="module" src="./js/orders.js"></script>
+</body>
+</html>
