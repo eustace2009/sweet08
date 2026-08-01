@@ -750,6 +750,21 @@ a { color: var(--candy); text-underline-offset: 0.2em; }
 
 /* 結帳表單 */
 .form { padding: 1.25rem; display: grid; gap: 1rem; }
+
+/* 表單分段標題：把收件與付款分開，長表單比較好掃 */
+.form__legend {
+  font-family: var(--font-tag);
+  font-size: var(--step--1);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--plum-soft);
+  padding-bottom: 0.4rem;
+  border-bottom: 1px dashed var(--sugar-2);
+}
+.form__legend + .field { margin-top: -0.25rem; }
+
+.field__hint { font-size: var(--step--1); color: var(--plum-soft); opacity: 0.8; }
+
 .field { display: grid; gap: 0.35rem; }
 .field label { font-size: var(--step--1); color: var(--plum-soft); }
 .field input {

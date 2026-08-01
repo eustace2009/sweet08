@@ -321,24 +321,28 @@
 
   function digits(value) { return value.replace(/\D/g, ''); }
 
-  function validatePayment(form) {
-    var number = digits(form.cardNumber.value);
-    var exp = form.cardExp.value.trim();
-    var cvc = digits(form.cardCvc.value);
+  /* 逐欄檢查，回傳 {field, message}，好把焦點移到出錯的欄位 */
+  function validateOrder(form) {
+    var name = form.name.value.trim();
+    var phone = digits(form.phone.value);
+    var address = form.address.value.trim();
+    var bank = digits(form.bankLast5.value);
 
-    if (number.length < 13) return '卡號至少 13 碼，請再確認一次。';
-    if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(exp)) return '有效期限請填 MM/YY，例如 08/28。';
-    if (cvc.length < 3) return '安全碼是卡片背面的 3 到 4 碼數字。';
-    return '';
+    if (name.length < 2) return { field: 'ship-name', message: '請填寫收件人姓名。' };
+    if (!/^09\d{8}$/.test(phone)) return { field: 'ship-phone', message: '手機號碼請填 09 開頭的 10 碼數字。' };
+    if (address.length < 8) return { field: 'ship-address', message: '配送地址請填完整，含縣市與門牌號碼。' };
+    if (bank.length !== 5) return { field: 'bank-last5', message: '請填寫轉帳帳號的末 5 碼數字。' };
+    return null;
   }
 
-  function submitPayment(e) {
+  function submitOrder(e) {
     e.preventDefault();
     var form = e.target;
-    var error = validatePayment(form);
+    var problem = validateOrder(form);
 
-    if (error) {
-      $('pay-error').textContent = error;
+    if (problem) {
+      $('pay-error').textContent = problem.message;
+      $(problem.field).focus();
       return;
     }
     $('pay-error').textContent = '';
@@ -350,6 +354,13 @@
     btn.disabled = true;
     btn.textContent = '處理中…';
 
+    var customer = {
+      name: form.name.value.trim(),
+      phone: digits(form.phone.value),
+      address: form.address.value.trim(),
+      bankLast5: digits(form.bankLast5.value)
+    };
+
     setTimeout(function () {
       var orderId = 'T' + Date.now();
       window.Analytics.purchase(state.cart, orderId);
@@ -360,8 +371,9 @@
           orderId: orderId,
           currency: 'TWD',
           total: cartTotal(),
-          status: 'paid',
+          status: 'pending',
           placedAt: new Date().toISOString(),
+          customer: customer,
           items: state.cart.map(function (i) {
             return { id: i.id, name: i.name, category: i.category, price: i.price, quantity: i.quantity };
           })
@@ -433,19 +445,18 @@
     $('hero-cart-btn').addEventListener('click', openCart);
     $('dock-btn').addEventListener('click', openCart);
     $('checkout-btn').addEventListener('click', startCheckout);
-    $('payment-form').addEventListener('submit', submitPayment);
+    $('payment-form').addEventListener('submit', submitOrder);
     $('continue-btn').addEventListener('click', function () {
       closeDialog($('checkout-dialog'));
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    /* 卡號、期限自動分隔，手機上少按幾次 */
-    $('card-number').addEventListener('input', function (e) {
-      e.target.value = digits(e.target.value).slice(0, 16).replace(/(.{4})/g, '$1 ').trim();
+    /* 手機號碼與末 5 碼只留數字，避免使用者貼到空白或分隔符 */
+    $('ship-phone').addEventListener('input', function (e) {
+      e.target.value = digits(e.target.value).slice(0, 10);
     });
-    $('card-exp').addEventListener('input', function (e) {
-      var v = digits(e.target.value).slice(0, 4);
-      e.target.value = v.length > 2 ? v.slice(0, 2) + '/' + v.slice(2) : v;
+    $('bank-last5').addEventListener('input', function (e) {
+      e.target.value = digits(e.target.value).slice(0, 5);
     });
 
     ['detail-dialog', 'cart-dialog', 'checkout-dialog'].forEach(function (id) {

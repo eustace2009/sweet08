@@ -237,33 +237,48 @@
 
       <div id="checkout-step-form">
         <div class="sheet__head">
-          <h2 id="checkout-title">填寫付款資訊</h2>
+          <h2 id="checkout-title">填寫收件與付款資訊</h2>
           <button type="button" class="btn btn--icon btn--ghost" data-close aria-label="關閉結帳">
             <svg class="icon" aria-hidden="true"><use href="#i-close"></use></svg>
           </button>
         </div>
         <div class="sheet__body">
           <form class="form" id="payment-form" novalidate>
+
+            <p class="form__legend">收件資訊</p>
+
             <div class="field">
-              <label for="card-number">信用卡號</label>
-              <input id="card-number" name="cardNumber" type="text" inputmode="numeric"
-                     autocomplete="cc-number" placeholder="1234 5678 9876 5432" maxlength="19" required>
+              <label for="ship-name">收件人姓名 <span aria-hidden="true">*</span></label>
+              <input id="ship-name" name="name" type="text" autocomplete="name"
+                     placeholder="收件人姓名" maxlength="40" required>
             </div>
-            <div class="field-row">
-              <div class="field">
-                <label for="card-exp">有效期限</label>
-                <input id="card-exp" name="cardExp" type="text" inputmode="numeric"
-                       autocomplete="cc-exp" placeholder="MM/YY" maxlength="5" required>
-              </div>
-              <div class="field">
-                <label for="card-cvc">安全碼</label>
-                <input id="card-cvc" name="cardCvc" type="text" inputmode="numeric"
-                       autocomplete="cc-csc" placeholder="123" maxlength="4" required>
-              </div>
+
+            <div class="field">
+              <label for="ship-phone">手機號碼 <span aria-hidden="true">*</span></label>
+              <input id="ship-phone" name="phone" type="tel" inputmode="numeric"
+                     autocomplete="tel" placeholder="0912345678" required>
             </div>
+
+            <div class="field">
+              <label for="ship-address">配送地址 <span aria-hidden="true">*</span></label>
+              <input id="ship-address" name="address" type="text" autocomplete="street-address"
+                     placeholder="完整配送地址（含郵遞區號）" maxlength="120" required>
+            </div>
+
+            <p class="form__legend">付款資訊</p>
+
+            <div class="field">
+              <label for="bank-last5">
+                銀行轉帳末 5 碼 <span aria-hidden="true">*</span>
+              </label>
+              <input id="bank-last5" name="bankLast5" type="text" inputmode="numeric"
+                     autocomplete="off" placeholder="12345" required>
+              <p class="field__hint">請先完成轉帳，再填入帳號末 5 碼供對帳。</p>
+            </div>
+
             <p class="detail__meta" id="pay-error" role="alert"></p>
-            <button type="submit" class="btn btn--primary btn--block" id="pay-btn">確認付款</button>
-            <p class="detail__meta">這是展示用流程，不會向任何卡片請款。</p>
+            <button type="submit" class="btn btn--primary btn--block" id="pay-btn">送出訂單</button>
+            <p class="detail__meta">這是展示用流程，不會產生實際交易。</p>
           </form>
         </div>
       </div>

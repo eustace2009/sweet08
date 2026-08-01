@@ -117,17 +117,19 @@ GA4 的 `gtag.js` 是用 `GA4_ID` 動態載入的，所以改 ID 不必再去找
                         └─ 連線恢復 → 自動補送
 ```
 
-送出的欄位對應（要改欄位名就直接改 `js/orders.js` 的 `saveOrder`）：
+訂單寫入 `js/orders.js` 的 `saveOrder`，欄位對齊資料表：
 
 ```sql
 create table public.orders (
-  id         uuid primary key default gen_random_uuid(),
-  order_id   text not null unique,
-  currency   text not null default 'TWD',
-  total      numeric not null,
-  items      jsonb not null,
-  status     text not null default 'paid',
-  placed_at  timestamptz not null default now()
+  id               uuid default gen_random_uuid() primary key,
+  customer_name    text not null,
+  customer_phone   text not null,
+  customer_address text not null,
+  remittance_last5 text not null,
+  items            jsonb not null,
+  total_amount     integer not null,
+  status           text default 'pending',
+  created_at       timestamptz default now()
 );
 
 alter table public.orders enable row level security;
@@ -135,6 +137,11 @@ alter table public.orders enable row level security;
 create policy "anon can insert orders"
   on public.orders for insert to anon with check (true);
 ```
+
+`id` 與 `created_at` 由資料表自動產生，前端不傳。要改欄位名就改 `saveOrder` 裡的對應。
+
+表單四個輸入框的 `name` 屬性必須是 `name`、`phone`、`address`、`bankLast5`，
+`app.js` 靠這些名稱取值——改介面時別動到。
 
 > `sb_publishable_…` 這類金鑰本來就設計成放在前端，安全性由 RLS 決定。
 > 上線前務必確認 `orders` 已啟用 RLS——**沒開 RLS 等於資料表對外全開**。

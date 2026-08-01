@@ -70,7 +70,7 @@
       send('add_payment_info', {
         currency: CURRENCY,
         value: cartValue(cart),
-        payment_type: 'Credit Card',
+        payment_type: 'Bank Transfer',
         items: fromCart(cart)
       });
     },

@@ -18,15 +18,18 @@ function setQueue(list) {
   try { localStorage.setItem(QUEUE_KEY, JSON.stringify(list)); } catch (e) { /* 無痕模式 */ }
 }
 
-/* --- 寫入一筆訂單 --- */
+/* --- 寫入一筆訂單 ---
+   欄位名稱對齊資料表 schema。若日後改表，改這裡即可。 */
 async function saveOrder(order) {
   const { error } = await supabase.from(ORDERS_TABLE).insert({
-    order_id:  order.orderId,
-    currency:  order.currency,
-    total:     order.total,
-    items:     order.items,
-    status:    order.status,
-    placed_at: order.placedAt
+    customer_name:    order.customer.name,
+    customer_phone:   order.customer.phone,
+    customer_address: order.customer.address,
+    remittance_last5: order.customer.bankLast5,
+    items:            order.items,
+    total_amount:     order.total,
+    status:           order.status
+    // id 與 created_at 由資料表自動產生，不需傳
   });
   if (error) throw error;
 }
